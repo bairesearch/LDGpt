@@ -1,0 +1,18 @@
+//LDGpt Specification (prompts):
+
+---
+v1a (Codex IDE GPT5Codex prompt);
+
+Please implement this VLM model training method;
+- randomly generate LDraw scene file, and render a snapshot image of the scene file (eg using LDView)
+- feed a VLM with both the image of the scene as input and the ldraw file as textual output
+
+Suggested supervised setup (PyTorch + HF)
+
+Model: VisionEncoderDecoderModel (e.g., ViT/Swin encoder + code-friendly decoder such as a small CodeLlama/GPT-NeoX).
+Loss: token-level cross-entropy with label smoothing (e.g., 0.1).
+Decoding: constrained beam search; parser filter.
+Batching: pack images + token sequences; clip max length; mixed precision (fp16/bf16).
+Aug: heavy render/style augment; random crops within margins.
+
+(You can slot this straight into transformers Trainer with a custom collator that pads both image tensors and token ids; extend the tokenizer with LDraw vocabulary.)
